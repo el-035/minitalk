@@ -1,0 +1,55 @@
+CC = cc
+
+CLIENT_CFILES = client.c
+SERVER_CFILES = server.c
+
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile
+
+FT_PRINTF_DIR = ft_printf
+FT_PRINTF = $(FT_PRINTF_DIR)/libftprintf.a
+FT_PRINTF_MAKEFILE = $(FT_PRINTF_DIR)/Makefile
+
+#creates object files from the c files given
+CLIENT_OFILES = $(CLIENT_CFILES:.c=.o)
+SERVER_OFILES = $(SERVER_CFILES:.c=.o)
+
+CFLAGS = -Wall -Wextra -Werror
+
+# all compiles all the c files into o files and archive them into libft.a
+all: server client
+
+client: $(CLIENT_OFILES) $(LIBFT) $(FT_PRINTF)
+	$(CC) $(CFLAGS) $(CLIENT_OFILES) $(LIBFT) $(FT_PRINTF) -o client
+
+server: $(SERVER_OFILES) $(LIBFT) $(FT_PRINTF)
+	$(CC) $(CFLAGS) $(SERVER_OFILES) $(LIBFT) $(FT_PRINTF) -o server
+
+# this sets the rule to compile all c files into o files $< is the prerequisite (aka the c files) and $@ is the target (aka the o files)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@  
+
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
+
+$(FT_PRINTF):
+	$(MAKE) -C $(FT_PRINTF_DIR)
+
+#gets rid of all o files after creating application
+clean:
+	rm -f $(CLIENT_OFILES) $(SERVER_OFILES)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(FT_PRINTF_DIR) clean
+
+#removes o files and library
+fclean: clean
+	rm -f client server
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(FT_PRINTF_DIR) fclean
+
+#to rebuild the whole project after cleaning everything
+re: fclean all
+
+#tells make that all, clean, re, and fclean should always be treated as commands and not as files to be created.
+.PHONY: all clean re fclean

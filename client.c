@@ -31,8 +31,9 @@ int main (int argc, char **argv)
 
 	if (argc != 3)
 		return (0);		//error handling
-	i = 0;
+	i = 2;
 	j = 0;
+	len = ft_strlen(argv[i]);
 	pid = ft_atoi(argv[1]);	//change to ft
 	while (argv[i])
 	{

@@ -4,7 +4,15 @@
 
 //server
 
+/* typedef struct s_action
+{
+	void	*handler;
+}				t_action;
 
+void handler(int signal)
+{
+
+} */
 
 int main(void)
 {
@@ -12,8 +20,10 @@ int main(void)
 
 	pid = getpid();
 	ft_printf("%d\n", pid);		//change
+
+	ft_printf("%d", len);
 	//sigaction
-	sigaction(SIGUSR1, );
+	//sigaction(SIGUSR1, );
 	while (1)
 		pause();
 }

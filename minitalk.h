@@ -7,5 +7,6 @@
 # include <signal.h>
 
 char	*message  = NULL;
+int	len = 0;
 
 #endif

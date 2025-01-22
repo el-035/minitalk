@@ -5,7 +5,7 @@ Add a signal handler to print a message when a signal is received.
 #include<unistd.h>
 #include <stdio.h>
 
-int sigusr1_count = 0;
+/* int sigusr1_count = 0;
 int sigusr2_count = 0;
 
 void handle_signal(int signal)
@@ -30,12 +30,11 @@ int main (void)
   signal(SIGUSR1, handle_signal);
   signal(SIGUSR2, handle_signal);
   
-  /*kill(pid, SIGUSR1);*/
-  
-/*
+  kill(pid, SIGUSR1);
   signal(SIGUSR2, handle_signal);
-  kill(pid, SIGUSR2);*/
+  kill(pid, SIGUSR2);
   while (1)
     pause();
-}
+} */
+
 

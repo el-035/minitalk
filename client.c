@@ -2,7 +2,7 @@
 
 #include<stdio.h>
 
-char	*convert_message(char msg)
+char	*convert_message(int msg)
 {
 	char *bits;
 	int	i;
@@ -21,23 +21,20 @@ char	*convert_message(char msg)
 	return (bits);
 }
 
-//client
-int main (int argc, char **argv)
+void	send_message(char *msg, int pid)
 {
-	int 	pid;
 	int		i;
 	int		j;
 	char	*bits;
 
-	if (argc != 3)
-		return (0);		//error handling
-	i = 2;
+	i = 0;
 	j = 0;
-	len = ft_strlen(argv[i]);
-	pid = ft_atoi(argv[1]);	//change to ft
-	while (argv[i])
+	bits = NULL;
+	while (msg[i])
 	{
-		bits = convert_message(*argv[i]);
+		if (bits)
+			free(bits);
+		bits = convert_message(msg[i]);
 		while(j <= 7)
 		{
 			if (bits[j] == '0')
@@ -48,4 +45,24 @@ int main (int argc, char **argv)
 		}
 		i++;
 	}
+	j = 0;
+	while (j >= 7)	//send null terminator
+	{
+		kill(pid, SIGUSR1);
+		j--;
+	}
+	free(bits);
+}
+
+
+//client
+int main (int argc, char **argv)
+{
+	int 	pid;
+
+	if (argc != 3)
+		return (0);		//error handling
+	pid = ft_atoi(argv[1]);	//change to ft
+	send_message(argv[2], pid);
+	//free bits or just not allocate
 }

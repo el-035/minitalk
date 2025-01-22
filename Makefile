@@ -1,7 +1,7 @@
 CC = cc
 
 CLIENT_CFILES = client.c
-SERVER_CFILES = server.c
+SERVER_CFILES = server.c s_utils.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a

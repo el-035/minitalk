@@ -6,7 +6,14 @@
 # include <stdlib.h>
 # include <signal.h>
 
-char	*message  = NULL;
-int	len = 0;
+//client
+char	*convert_message(int msg);
+void	send_message(char *msg, int pid);
+
+//server
+
+//utils
+int	power(int base, int power);
+int	get_char(char *bits);
 
 #endif

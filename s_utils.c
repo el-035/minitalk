@@ -15,12 +15,16 @@ int	power(int base, int power)
 	return (res);
 }
 
-int	get_char(char *bits)
+char	*get_char(char *bits)
 {
-	int	res;
-	int	i;
-	int	j;
+	char	*letter;
+	int		res;
+	int		i;
+	int		j;
 
+	letter = (char *) ft_calloc(2, sizeof(char));
+	if (!letter)
+		return NULL; //error handling
 	res = 0;
 	i = 7;
 	j = 0;
@@ -31,5 +35,6 @@ int	get_char(char *bits)
 		i--;
 		j++;
 	}
-  return (res);
+	letter[0] = res;
+	return (letter);
 }

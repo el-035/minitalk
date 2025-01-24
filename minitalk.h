@@ -6,6 +6,11 @@
 # include <stdlib.h>
 # include <signal.h>
 
+/* typedef struct sigaction
+{
+	void	*sa_handler;
+}			t_signal; */
+
 //client
 char	*convert_message(int msg);
 void	send_message(char *msg, int pid);
@@ -14,6 +19,6 @@ void	send_message(char *msg, int pid);
 
 //utils
 int	power(int base, int power);
-int	get_char(char *bits);
+char	*get_char(char *bits);
 
 #endif

@@ -28,32 +28,51 @@ void	send_message(char *msg, int pid)
 	char	*bits;
 
 	i = 0;
-	j = 0;
 	bits = NULL;
 	while (msg[i])
 	{
 		if (bits)
+		{
 			free(bits);
+			bits = NULL;
+		}
 		bits = convert_message(msg[i]);
+		j = 0;
 		while(j <= 7)
 		{
 			if (bits[j] == '0')
+			{
 				kill(pid, SIGUSR1);
+				usleep(1000);	
+			}
 			else if (bits[j] == '1')
+			{
 				kill(pid, SIGUSR2);
+				usleep(1000);
+			}
 			j++;
 		}
 		i++;
 	}
-	j = 0;
-	while (j >= 7)	//send null terminator
+	if (bits)
 	{
-		kill(pid, SIGUSR1);
-		j--;
+		free(bits);
+		bits = NULL;
 	}
-	free(bits);
 }
 
+void	send_terminator(int pid)
+{
+	int j;
+
+	j = 1;
+	while (j <= 8)	//send null terminator
+	{
+		kill(pid, SIGUSR1);
+		usleep(1000);
+		j++;
+	}
+}
 
 //client
 int main (int argc, char **argv)
@@ -64,5 +83,7 @@ int main (int argc, char **argv)
 		return (0);		//error handling
 	pid = ft_atoi(argv[1]);	//change to ft
 	send_message(argv[2], pid);
+	send_terminator(pid);
 	//free bits or just not allocate
+	//send_h(pid);
 }

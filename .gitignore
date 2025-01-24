@@ -1,3 +1,5 @@
 /libft
 /ft_printf
 .vscode/
+test.c
+sendbits.c

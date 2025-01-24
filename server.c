@@ -6,21 +6,17 @@ char *save_msg(char *char_bits, char *msg)
 {
 	char	*letter;
 	char	*temp;
+	char	*te;
 
 	letter = get_char(char_bits); //protect
 	if (!msg)
-	{
-/* 		msg = (char *) ft_calloc(2, sizeof(char));
-		if (!msg)
-			return (NULL);
-		msg = letter; */
 		return (letter);
-	}
+	te = letter;
 	temp = msg; //also free letter
 	msg = ft_strjoin(msg, letter);
 	if (!msg)
 		return NULL;	//handle error
-	return (free(temp), msg);
+	return (free(temp), temp = NULL, free(te), te = NULL, msg);
 }
 
 int	is_terminator(char *bits)

@@ -2,15 +2,19 @@
 
 #include <stdio.h>
 
-char *convert_message(int msg)
+char *convert_message(int msg, char *bits)
 {
-	char *bits;
 	int i;
 
-	bits = (char *)malloc(9 * sizeof(char)); // change to calloc
 	if (!bits)
-		return (NULL);
-	bits[8] = '\0';
+	{
+		bits = (char *)malloc(9 * sizeof(char)); // change to calloc
+		if (!bits)
+			return (NULL);
+		bits[8] = '\0';
+	}
+	else
+		ft_bzero(bits, 9);
 	i = 7;
 	while (i >= 0)
 	{
@@ -21,7 +25,7 @@ char *convert_message(int msg)
 	return (bits);
 }
 
-void send_message(char *msg, int pid)
+void send_message(unsigned char *msg, int pid)
 {
 	int i;
 	int j;
@@ -31,21 +35,15 @@ void send_message(char *msg, int pid)
 	bits = NULL;
 	while (msg[i])
 	{
-		lets_free(bits);
-		bits = convert_message(msg[i]);
+		bits = convert_message(msg[i], bits);
 		j = 0;
-		while (j <= 7)
+		while (j <= 8)
 		{
 			if (bits[j] == '0')
-			{
 				kill(pid, SIGUSR1);
-				usleep(250);
-			}
 			else if (bits[j] == '1')
-			{
 				kill(pid, SIGUSR2);
-				usleep(250);
-			}
+			usleep(80);
 			j++;
 		}
 		i++;
@@ -61,7 +59,7 @@ void send_terminator(int pid)
 	while (j <= 8) // send null terminator
 	{
 		kill(pid, SIGUSR1);
-		usleep(250);
+		usleep(80);
 		j++;
 	}
 }
@@ -74,14 +72,21 @@ void	lets_free(char *str)
 		str = NULL;
 	}
 }
+
 // client
+
+//send more then 1000
 int main(int argc, char **argv)
 {
-	int pid;
+	int pid;	//check that is positive
 
 	if (argc != 3)
 		return (0);			// error handling
+	if(!*argv[2])
+		return 0;
 	pid = ft_atoi(argv[1]); // change to ft
-	send_message(argv[2], pid);
+	if (pid <= 0)
+		return 1;			//error
+	send_message((unsigned char *)argv[2], pid);
 	send_terminator(pid);
 }

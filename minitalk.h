@@ -2,7 +2,6 @@
 # define MINITALK_H
 
 # include "ft_printf/ft_printf.h"
-# include "libft/libft.h"
 # include <stdlib.h>
 # include <signal.h>
 
@@ -12,13 +11,22 @@
 }			t_signal; */
 
 //client
-char	*convert_message(int msg);
-void	send_message(char *msg, int pid);
+char	*convert_message(int msg, char *bits);
+void	send_message(unsigned char *msg, int pid);
+void	lets_free(char *str);
 
 //server
 
+//ft_libft
+void	ft_putstr_fd(unsigned char *s, int fd);
+void	*ft_calloc(size_t nmemb, size_t size);
+size_t	ft_strlen(const unsigned char *str);
+unsigned char	*ft_strjoin(const unsigned char *s1, const unsigned char *s2);
+void	ft_bzero(void *s, size_t n);
+int	ft_atoi(const char *str);
+
 //utils
-int	power(int base, int power);
-char	*get_char(char *bits);
+int		power(int base, int power);
+unsigned char	*get_char(char *bits);
 
 #endif

@@ -15,14 +15,14 @@ int	power(int base, int power)
 	return (res);
 }
 
-char	*get_char(char *bits)
+unsigned char	*get_char(char *bits)
 {
-	char	*letter;
+	unsigned char	*letter;
 	int		res;
 	int		i;
 	int		j;
 
-	letter = (char *) ft_calloc(2, sizeof(char));
+	letter = (unsigned char *) ft_calloc(2, sizeof(char));
 	if (!letter)
 		return NULL; //error handling
 	res = 0;

@@ -2,17 +2,17 @@
 #include <stdio.h>	//delete
 
 
-char *save_msg(char *char_bits, char *msg)
+unsigned char *save_msg(char *char_bits, unsigned char *msg)
 {
-	char	*letter;
-	char	*temp;
-	char	*te;
+	unsigned char	*letter;
+	unsigned char	*temp;
+	unsigned char	*te;
 
 	letter = get_char(char_bits); //protect
 	if (!msg)
 		return (letter);
 	te = letter;
-	temp = msg; //also free letter
+	temp = msg;
 	msg = ft_strjoin(msg, letter);
 	if (!msg)
 		return NULL;	//handle error
@@ -35,9 +35,9 @@ int	is_terminator(char *bits)
 
 void handler(int signal)
 {
-	static int	i = 0;
-	static char	char_bits[9] = {0};
-	static char	*msg = NULL;
+	static int				i = 0;
+	static char				char_bits[9] = {0};
+	static unsigned char	*msg = NULL;
 
 	char_bits[8] = '\0';
 	if (signal == SIGUSR1)	//0
@@ -68,9 +68,9 @@ int main(void)
 	ft_printf("%d\n", pid);		//change
 	sig.sa_handler = handler;
  	sig.sa_flags = SA_RESTART;
-	sigemptyset(&sig.sa_mask);
-	sigaddset(&sig.sa_mask, SIGUSR1);
-	sigaddset(&sig.sa_mask, SIGUSR2);
+/* 	sigemptyset(&sig.sa_mask);
+ 	sigaddset(&sig.sa_mask, SIGUSR1);
+	sigaddset(&sig.sa_mask, SIGUSR2); */
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
 	while (1)

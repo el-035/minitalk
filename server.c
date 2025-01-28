@@ -33,22 +33,36 @@ int	is_terminator(char *bits)
 	return (1);
 }
 
-void handler(int signal)
+void	print_msg(unsigned char *msg)
+{
+	write(1, (const char *)msg, ft_strlen(msg));
+	write(1, "\n", 1);
+/* 	free(msg);
+	msg = NULL; */
+}
+
+void handler(int signal, siginfo_t *info, void *ucontext)
 {
 	static int				i = 0;
 	static char				char_bits[9] = {0};
 	static unsigned char	*msg = NULL;
 
-	//char_bits[8] = '\0';
+	(void) ucontext;
 	if (signal == SIGUSR1)	//0
+	{
 		char_bits[i++] = '0';
+		kill(info->si_pid, SIGUSR1);
+	}
 	else if (signal == SIGUSR2)	//1
+	{
 		char_bits[i++] = '1';
+		kill(info->si_pid, SIGUSR1);
+	}
 	if (i == 8)
 	{
 		if (is_terminator(char_bits) == 1)
 		{
-			write(1, (const char *)msg, ft_strlen(msg));
+			print_msg(msg);
 			free(msg);
 			msg = NULL;
 		}
@@ -66,8 +80,8 @@ int main(void)
 
 	pid = getpid();
 	ft_printf("%d\n", pid);		//change
-	sig.sa_handler = handler;
- 	sig.sa_flags = SA_RESTART;
+	sig.sa_sigaction = handler;
+ 	sig.sa_flags = SA_SIGINFO;
 	sigemptyset(&sig.sa_mask);
  	sigaddset(&sig.sa_mask, SIGUSR1);
 	sigaddset(&sig.sa_mask, SIGUSR2);

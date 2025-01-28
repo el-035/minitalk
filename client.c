@@ -2,6 +2,9 @@
 
 #include <stdio.h>
 
+volatile int sig_g = 0;
+
+
 char *convert_message(int msg, char *bits)
 {
 	int i;
@@ -24,7 +27,6 @@ char *convert_message(int msg, char *bits)
 	}
 	return (bits);
 }
-
 void send_message(unsigned char *msg, int pid)
 {
 	int i;
@@ -43,7 +45,9 @@ void send_message(unsigned char *msg, int pid)
 				kill(pid, SIGUSR1);
 			else if (bits[j] == '1')
 				kill(pid, SIGUSR2);
-			usleep(300);
+			while(!sig_g)
+				;
+			sig_g = 0;
 			j++;
 		}
 		i++;
@@ -55,12 +59,14 @@ void send_terminator(int pid)
 {
 	int j;
 
-	j = 1;
+	j = 0;
 	while (j < 8) // send null terminator
 	{
 		kill(pid, SIGUSR1);
-		usleep(300);
 		j++;
+		while(!sig_g)
+			;
+		sig_g = 0;
 	}
 }
 
@@ -75,18 +81,29 @@ void	lets_free(char *str)
 
 // client
 
+void handler(int sig)
+{
+	if (sig == SIGUSR1)
+		sig_g = 1;
+}
+
 //send more then 1000
 int main(int argc, char **argv)
 {
+	struct sigaction sig;
 	int pid;	//check that is positive
 
 	if (argc != 3 || !*argv[2] || !argv[2])
 		return (0);			// error handling
-/* 	if(!*argv[2])
-		return 0; */
-	pid = ft_atoi(argv[1]); // change to ft
+
+	pid = ft_atoi(argv[1]); // change to log long
 	if (pid <= 0)
 		return 1;			//error
+	sig.sa_handler = handler;
+	sig.sa_flags = SA_RESTART;
+	sigaction(SIGUSR1, &sig, NULL);
 	send_message((unsigned char *)argv[2], pid);
 	send_terminator(pid);
+	/* while (1)
+		pause(); */
 }

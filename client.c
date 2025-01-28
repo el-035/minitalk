@@ -46,6 +46,8 @@ void send_message(unsigned char *msg, int pid)
 				kill(pid, SIGUSR2);
 			while(!sig_g)
 				;
+/* 			if(sig_g == 3)
+				return(lets_free((char *) msg), exit(0)); */
 			sig_g = 0;
 			j++;
 		}
@@ -73,9 +75,15 @@ void handler(int sig)
 {
 	if (sig == SIGUSR1)
 		sig_g = 1;
+	else if (sig == SIGINT)
+		sig_g = 2;
+	/* else if (sig == SIGUSR2)
+		sig_g = 3; */
 }
 
 //check interruption
+//if send \n and so on it prints them
+//if sending multiple message from different pids
 int main(int argc, char **argv)
 {
 	struct sigaction sig;
@@ -86,9 +94,18 @@ int main(int argc, char **argv)
 	if (!*argv[2] || !argv[2])
 		errors("Include a message to send\n", NULL);	
 	pid = atoi_mt(argv[1]);
+	if (kill(pid, 0) == -1)
+		errors("No process with this pid\n", NULL);
 	sig.sa_handler = handler;
 	sig.sa_flags = SA_RESTART;
 	sigaction(SIGUSR1, &sig, NULL);
+	sigaction(SIGINT, &sig, NULL);
+	if(sig_g == 2)
+	{
+		send_terminator(pid);
+		send_terminator(pid);
+		sig_g = 0;
+	}
 	send_message((unsigned char *)argv[2], pid);
 	send_terminator(pid);
 }

@@ -87,7 +87,7 @@ int	atoi_mt(const char *str)
 	is_digit((char *) str, i);
 	while (str[i] && str[i] >= 48 && str[i] <= 57)
 		result = result * 10 + str[i++] - 48;
-	if (result > 2147483647)
+	if (result > 2147483647 || result == 0)
 		errors("Invalid pid\n", NULL);				//
 	return ((int) result);
 }

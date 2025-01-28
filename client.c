@@ -46,8 +46,8 @@ void send_message(unsigned char *msg, int pid)
 				kill(pid, SIGUSR2);
 			while(!sig_g)
 				;
-/* 			if(sig_g == 3)
-				return(lets_free((char *) msg), exit(0)); */
+			if(sig_g == 3)
+				return(lets_free((char *) msg), exit(1));
 			sig_g = 0;
 			j++;
 		}
@@ -77,13 +77,14 @@ void handler(int sig)
 		sig_g = 1;
 	else if (sig == SIGINT)
 		sig_g = 2;
-	/* else if (sig == SIGUSR2)
-		sig_g = 3; */
+	else if (sig == SIGUSR2)
+		sig_g = 3;
 }
 
 //check interruption
 //if send \n and so on it prints them
 //if sending multiple message from different pids
+		//the first client ends in an infinite loop
 int main(int argc, char **argv)
 {
 	struct sigaction sig;
@@ -99,6 +100,7 @@ int main(int argc, char **argv)
 	sig.sa_handler = handler;
 	sig.sa_flags = SA_RESTART;
 	sigaction(SIGUSR1, &sig, NULL);
+	sigaction(SIGUSR2, &sig, NULL);
 	sigaction(SIGINT, &sig, NULL);
 	if(sig_g == 2)
 	{

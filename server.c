@@ -46,16 +46,17 @@ void handler(int signal, siginfo_t *info, void *ucontext)
 	static int				i = 0;
 	static char				char_bits[9] = {0};
 	static unsigned char	*msg = NULL;
-	//static int				cur_pid = -1;
+	static int				cur_pid = -1;
 
 	(void) ucontext;
-/* 	if (info->si_pid != cur_pid)
+	if (info->si_pid != cur_pid)
 	{
 		ft_bzero(char_bits, 9);
 		i = 0;
-		kill(info->si_pid, SIGUSR2);
+		if (cur_pid != -1)
+			kill(info->si_pid, SIGUSR2);
 		cur_pid = info->si_pid;
-	} */
+	}
 	if (signal == SIGUSR1)	//0
 	{
 		char_bits[i++] = '0';

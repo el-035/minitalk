@@ -6,17 +6,17 @@ unsigned char *save_msg(char *char_bits, unsigned char *msg)
 {
 	unsigned char	*letter;
 	unsigned char	*temp;
-	unsigned char	*te;
 
 	letter = get_char(char_bits); //protect
+	if (!letter)
+		return NULL; //handle
 	if (!msg)
 		return (letter);
-	te = letter;
 	temp = msg;
 	msg = ft_strjoin(msg, letter);
 	if (!msg)
 		return NULL;	//handle error
-	return (free(temp), temp = NULL, free(te), te = NULL, msg);
+	return (free(temp), temp = NULL, free(letter), letter = NULL, msg);
 }
 
 int	is_terminator(char *bits)
@@ -39,7 +39,7 @@ void handler(int signal)
 	static char				char_bits[9] = {0};
 	static unsigned char	*msg = NULL;
 
-	char_bits[8] = '\0';
+	//char_bits[8] = '\0';
 	if (signal == SIGUSR1)	//0
 		char_bits[i++] = '0';
 	else if (signal == SIGUSR2)	//1
@@ -48,7 +48,7 @@ void handler(int signal)
 	{
 		if (is_terminator(char_bits) == 1)
 		{
-			ft_putstr_fd(msg, 1);
+			write(1, (const char *)msg, ft_strlen(msg));
 			free(msg);
 			msg = NULL;
 		}
@@ -68,9 +68,9 @@ int main(void)
 	ft_printf("%d\n", pid);		//change
 	sig.sa_handler = handler;
  	sig.sa_flags = SA_RESTART;
-/* 	sigemptyset(&sig.sa_mask);
+	sigemptyset(&sig.sa_mask);
  	sigaddset(&sig.sa_mask, SIGUSR1);
-	sigaddset(&sig.sa_mask, SIGUSR2); */
+	sigaddset(&sig.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
 	while (1)

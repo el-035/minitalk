@@ -8,10 +8,10 @@ char *convert_message(int msg, char *bits)
 
 	if (!bits)
 	{
-		bits = (char *)malloc(9 * sizeof(char)); // change to calloc
+		bits = (char *)ft_calloc(9, sizeof(char)); // change to calloc
 		if (!bits)
 			return (NULL);
-		bits[8] = '\0';
+		//bits[8] = '\0';
 	}
 	else
 		ft_bzero(bits, 9);
@@ -37,13 +37,13 @@ void send_message(unsigned char *msg, int pid)
 	{
 		bits = convert_message(msg[i], bits);
 		j = 0;
-		while (j <= 8)
+		while (j < 8)
 		{
 			if (bits[j] == '0')
 				kill(pid, SIGUSR1);
 			else if (bits[j] == '1')
 				kill(pid, SIGUSR2);
-			usleep(80);
+			usleep(300);
 			j++;
 		}
 		i++;
@@ -56,10 +56,10 @@ void send_terminator(int pid)
 	int j;
 
 	j = 1;
-	while (j <= 8) // send null terminator
+	while (j < 8) // send null terminator
 	{
 		kill(pid, SIGUSR1);
-		usleep(80);
+		usleep(300);
 		j++;
 	}
 }
@@ -80,10 +80,10 @@ int main(int argc, char **argv)
 {
 	int pid;	//check that is positive
 
-	if (argc != 3)
+	if (argc != 3 || !*argv[2] || !argv[2])
 		return (0);			// error handling
-	if(!*argv[2])
-		return 0;
+/* 	if(!*argv[2])
+		return 0; */
 	pid = ft_atoi(argv[1]); // change to ft
 	if (pid <= 0)
 		return 1;			//error

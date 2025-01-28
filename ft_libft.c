@@ -63,27 +63,48 @@ void	ft_bzero(void *s, size_t n)
 		*res++ = '\0';
 }
 
-int	ft_atoi(const char *str)
+void	is_digit(char *str, int pos)
 {
-	int	i;
-	int	result;
-	int	n;
+	while (str[pos])
+	{
+		if (str[pos] < '0' || str[pos] > '9')
+			errors("pid invalid\n", NULL);
+		pos++;
+	}
+}
 
-	n = 1;
+int	atoi_mt(const char *str)
+{
+	int				i;
+	long long		result;
+
 	i = 0;
 	result = 0;
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
-	if (str[i] == '-' || str[i] == '+')
+	if (str[i] == '-')
+		errors("Invalid pid\n", NULL);						//
+	is_digit((char *) str, i);
+	while (str[i] && str[i] >= 48 && str[i] <= 57)
+		result = result * 10 + str[i++] - 48;
+	if (result > 2147483647)
+		errors("Invalid pid\n", NULL);				//
+	return ((int) result);
+}
+
+void	errors(char *msg, char *free)
+{
+	write(2, "Error\n", 6);
+	write(2, msg, ft_strlen((unsigned char *) msg));
+	lets_free(free);
+	exit(1);
+}
+
+void	lets_free(char *str)
+{
+	if(str)
 	{
-		if (str[i] == '-')
-			n = -1;
-		i++;
+		free(str);
+		str = NULL;
 	}
-	if (str[i])
-	{
-		while (str[i] >= 48 && str[i] <= 57)
-			result = result * 10 + str[i++] - 48;
-	}
-	return (result * n);
 }

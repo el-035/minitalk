@@ -24,6 +24,9 @@ size_t	ft_strlen(const unsigned char *str);
 unsigned char	*ft_strjoin(const unsigned char *s1, const unsigned char *s2);
 void	ft_bzero(void *s, size_t n);
 int	ft_atoi(const char *str);
+int	atoi_mt(const char *str);
+void errors(char *msg, char *free);
+void	is_digit(char *str, int pos);
 
 //utils
 int		power(int base, int power);

@@ -9,13 +9,13 @@ unsigned char *save_msg(char *char_bits, unsigned char *msg)
 
 	letter = get_char(char_bits); //protect
 	if (!letter)
-		return NULL; //handle
+		errors("Allocation failed\n", (char *)msg);
 	if (!msg)
 		return (letter);
 	temp = msg;
 	msg = ft_strjoin(msg, letter);
 	if (!msg)
-		return NULL;	//handle error
+		errors("Allocation failed\n", (char *)msg);	//handle error
 	return (free(temp), temp = NULL, free(letter), letter = NULL, msg);
 }
 
@@ -33,12 +33,12 @@ int	is_terminator(char *bits)
 	return (1);
 }
 
-void	print_msg(unsigned char *msg)
+void	print_msg(unsigned char **msg)
 {
-	write(1, (const char *)msg, ft_strlen(msg));
+	write(1, (const char *)(*msg), ft_strlen(*msg));
 	write(1, "\n", 1);
-/* 	free(msg);
-	msg = NULL; */
+	free(*msg);
+	*msg = NULL;
 }
 
 void handler(int signal, siginfo_t *info, void *ucontext)
@@ -61,11 +61,7 @@ void handler(int signal, siginfo_t *info, void *ucontext)
 	if (i == 8)
 	{
 		if (is_terminator(char_bits) == 1)
-		{
-			print_msg(msg);
-			free(msg);
-			msg = NULL;
-		}
+			print_msg(&msg);
 		else
 			msg = save_msg(char_bits, msg); //error handling
 		ft_bzero(char_bits, 9);

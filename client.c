@@ -4,7 +4,6 @@
 
 volatile int sig_g = 0;
 
-
 char *convert_message(int msg, char *bits)
 {
 	int i;
@@ -14,7 +13,6 @@ char *convert_message(int msg, char *bits)
 		bits = (char *)ft_calloc(9, sizeof(char)); // change to calloc
 		if (!bits)
 			return (NULL);
-		//bits[8] = '\0';
 	}
 	else
 		ft_bzero(bits, 9);
@@ -27,6 +25,7 @@ char *convert_message(int msg, char *bits)
 	}
 	return (bits);
 }
+
 void send_message(unsigned char *msg, int pid)
 {
 	int i;
@@ -70,40 +69,26 @@ void send_terminator(int pid)
 	}
 }
 
-void	lets_free(char *str)
-{
-	if(str)
-	{
-		free(str);
-		str = NULL;
-	}
-}
-
-// client
-
 void handler(int sig)
 {
 	if (sig == SIGUSR1)
 		sig_g = 1;
 }
 
-//send more then 1000
+//check interruption
 int main(int argc, char **argv)
 {
 	struct sigaction sig;
-	int pid;	//check that is positive
+	int pid;
 
-	if (argc != 3 || !*argv[2] || !argv[2])
-		return (0);			// error handling
-
-	pid = ft_atoi(argv[1]); // change to log long
-	if (pid <= 0)
-		return 1;			//error
+	if (argc != 3)
+		errors("Invalid arguments\n", NULL);
+	if (!*argv[2] || !argv[2])
+		errors("Include a message to send\n", NULL);	
+	pid = atoi_mt(argv[1]);
 	sig.sa_handler = handler;
 	sig.sa_flags = SA_RESTART;
 	sigaction(SIGUSR1, &sig, NULL);
 	send_message((unsigned char *)argv[2], pid);
 	send_terminator(pid);
-	/* while (1)
-		pause(); */
 }

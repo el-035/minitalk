@@ -33,8 +33,9 @@ int	is_terminator(char *bits)
 	return (1);
 }
 
-void	print_msg(unsigned char **msg)
+void	print_msg(unsigned char **msg, int pid)
 {
+	kill(pid, SIGUSR2);
 	write(1, (const char *)(*msg), ft_strlen(*msg));
 	write(1, "\n", 1);
 	free(*msg);
@@ -46,21 +47,13 @@ void handler(int signal, siginfo_t *info, void *ucontext)
 	static int				i = 0;
 	static char				char_bits[9] = {0};
 	static unsigned char	*msg = NULL;
-	static int				cur_pid = -1;
 
 	(void) ucontext;
-	if (info->si_pid != cur_pid)
-	{
-		ft_bzero(char_bits, 9);
-		i = 0;
-		if (cur_pid != -1)
-			kill(info->si_pid, SIGUSR2);
-		cur_pid = info->si_pid;
-	}
 	if (signal == SIGUSR1)	//0
 	{
 		char_bits[i++] = '0';
-		kill(info->si_pid, SIGUSR1);
+		if(i != 8 || is_terminator(char_bits) != 1)
+			kill(info->si_pid, SIGUSR1);
 	}
 	else if (signal == SIGUSR2)	//1
 	{
@@ -70,7 +63,7 @@ void handler(int signal, siginfo_t *info, void *ucontext)
 	if (i == 8)
 	{
 		if (is_terminator(char_bits) == 1)
-			print_msg(&msg);
+			print_msg(&msg, info->si_pid);
 		else
 			msg = save_msg(char_bits, msg); //error handling
 		ft_bzero(char_bits, 9);

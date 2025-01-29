@@ -5,10 +5,12 @@
 # include <stdlib.h>
 # include <signal.h>
 
-/* typedef struct sigaction
+typedef struct s_bits
 {
-	void	*sa_handler;
-}			t_signal; */
+	char	*bits;
+}				t_bits;
+
+
 
 //client
 char	*convert_message(int msg, char *bits);

@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/29 20:42:00 by efittant          #+#    #+#             */
+/*   Updated: 2025/01/29 20:42:04 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
-#include <stdio.h>	//delete
+#include <stdio.h> //delete
 
-
-unsigned char *save_msg(char *char_bits, unsigned char *msg)
+unsigned char	*save_msg(char *char_bits, unsigned char *msg)
 {
 	unsigned char	*letter;
 	unsigned char	*temp;
 
-	letter = get_char(char_bits); //protect
+	letter = get_char(char_bits);
 	if (!letter)
 		errors("Allocation failed\n", (char *)msg);
 	if (!msg)
@@ -15,7 +26,7 @@ unsigned char *save_msg(char *char_bits, unsigned char *msg)
 	temp = msg;
 	msg = ft_strjoin(msg, letter);
 	if (!msg)
-		errors("Allocation failed\n", (char *)msg);	//handle error
+		errors("Allocation failed\n", (char *)msg);
 	return (free(temp), temp = NULL, free(letter), letter = NULL, msg);
 }
 
@@ -24,7 +35,7 @@ int	is_terminator(char *bits)
 	int	i;
 
 	i = 0;
-	while(bits[i])
+	while (bits[i])
 	{
 		if (bits[i] == '1')
 			return (0);
@@ -42,20 +53,20 @@ void	print_msg(unsigned char **msg, int pid)
 	*msg = NULL;
 }
 
-void handler(int signal, siginfo_t *info, void *ucontext)
+void	s_handler(int signal, siginfo_t *info, void *ucontext)
 {
 	static int				i = 0;
 	static char				char_bits[9] = {0};
 	static unsigned char	*msg = NULL;
 
-	(void) ucontext;
-	if (signal == SIGUSR1)	//0
+	(void)ucontext;
+	if (signal == SIGUSR1)
 	{
 		char_bits[i++] = '0';
-		if(i != 8 || is_terminator(char_bits) != 1)
+		if (i != 8 || is_terminator(char_bits) != 1)
 			kill(info->si_pid, SIGUSR1);
 	}
-	else if (signal == SIGUSR2)	//1
+	else if (signal == SIGUSR2)
 	{
 		char_bits[i++] = '1';
 		kill(info->si_pid, SIGUSR1);
@@ -65,23 +76,23 @@ void handler(int signal, siginfo_t *info, void *ucontext)
 		if (is_terminator(char_bits) == 1)
 			print_msg(&msg, info->si_pid);
 		else
-			msg = save_msg(char_bits, msg); //error handling
+			msg = save_msg(char_bits, msg);
 		ft_bzero(char_bits, 9);
 		i = 0;
 	}
 }
 
-int main(void)
+int	main(void)
 {
-	struct sigaction sig;
-	int		pid;
+	struct sigaction	sig;
+	int					pid;
 
 	pid = getpid();
-	ft_printf("%d\n", pid);		//change
-	sig.sa_sigaction = handler;
- 	sig.sa_flags = SA_SIGINFO;
+	ft_printf("%d\n", pid);
+	sig.sa_sigaction = s_handler;
+	sig.sa_flags = SA_SIGINFO;
 	sigemptyset(&sig.sa_mask);
- 	sigaddset(&sig.sa_mask, SIGUSR1);
+	sigaddset(&sig.sa_mask, SIGUSR1);
 	sigaddset(&sig.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);

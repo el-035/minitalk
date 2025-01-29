@@ -1,8 +1,7 @@
 CC = cc
 
-CLIENT_CFILES = client.c ft_libft.c
-SERVER_CFILES = server.c s_utils.c ft_libft.c
-
+CLIENT_CFILES = client.c c_utils.c ft_libft.c err_free.c
+SERVER_CFILES = server.c s_utils.c ft_libft.c err_free.c
 #LIBFT_DIR = libft
 #LIBFT = $(LIBFT_DIR)/libft.a
 #LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile

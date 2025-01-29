@@ -1,12 +1,23 @@
-#include "minitalk.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/29 20:41:18 by efittant          #+#    #+#             */
+/*   Updated: 2025/01/29 20:41:21 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minitalk.h"
 #include <stdio.h>
 
-volatile int sig_g = 0;
+volatile int	sig_g = 0;
 
-char *convert_message(int msg, char bits[9])
+char	*convert_message(int msg, char bits[9])
 {
-	int i;
+	int	i;
 
 	ft_bzero(bits, 9);
 	i = 7;
@@ -19,11 +30,11 @@ char *convert_message(int msg, char bits[9])
 	return (bits);
 }
 
-void send_message(unsigned char *msg, int pid)
+void	send_message(unsigned char *msg, int pid)
 {
-	int i;
-	int j;
-	char bits[9];
+	int		i;
+	int		j;
+	char	bits[9];
 
 	i = 0;
 	ft_bzero(bits, 9);
@@ -37,7 +48,7 @@ void send_message(unsigned char *msg, int pid)
 				kill(pid, SIGUSR1);
 			else if (bits[j] == '1')
 				kill(pid, SIGUSR2);
-			while(!sig_g)
+			while (!sig_g)
 				;
 			sig_g = 0;
 			j++;
@@ -46,34 +57,23 @@ void send_message(unsigned char *msg, int pid)
 	}
 }
 
-
-void send_terminator(int pid)
+void	send_terminator(int pid)
 {
-	int j;
+	int	j;
 
 	j = 0;
-	while (j < 8) // send null terminator
+	while (j < 8)
 	{
 		kill(pid, SIGUSR1);
 		j++;
-		while(!sig_g)
+		while (!sig_g)
 			;
 		sig_g = 0;
 		usleep(200);
 	}
 }
 
-int	return_pid(int pid)
-{
-	static int	temp_pid = 0;
-
-	if (temp_pid != pid && pid != 0)
-		temp_pid = pid;
-	return (temp_pid);
-}
-
-
-void handler(int sig)
+void	handler(int sig)
 {
 	if (sig == SIGUSR1)
 		sig_g = 1;
@@ -85,19 +85,19 @@ void handler(int sig)
 	else if (sig == SIGUSR2)
 		exit(1);
 }
-//check interruption
-//funcheck
-//valgrind
+// check interruption
+// funcheck
+// valgrind
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	struct sigaction sig;
-	int pid;
+	struct sigaction	sig;
+	int					pid;
 
 	if (argc != 3)
 		errors("Invalid arguments\n", NULL);
 	if (!*argv[2] || !argv[2])
-		errors("Include a message to send\n", NULL);	
+		errors("Include a message to send\n", NULL);
 	pid = atoi_mt(argv[1]);
 	return_pid(pid);
 	if (kill(pid, 0) == -1)
@@ -111,3 +111,4 @@ int main(int argc, char **argv)
 	send_message((unsigned char *)argv[2], pid);
 	send_terminator(pid);
 }
+

@@ -1,10 +1,21 @@
-#include "minitalk.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   s_utils.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/29 21:18:34 by efittant          #+#    #+#             */
+/*   Updated: 2025/01/29 21:18:36 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include<stdio.h>
+#include "minitalk.h"
+#include <stdio.h>
 
 int	power(int base, int power)
 {
-	int res;
+	int	res;
 
 	res = 1;
 	while (power >= 1)
@@ -18,13 +29,13 @@ int	power(int base, int power)
 unsigned char	*get_char(char *bits)
 {
 	unsigned char	*letter;
-	int		res;
-	int		i;
-	int		j;
+	int				res;
+	int				i;
+	int				j;
 
-	letter = (unsigned char *) ft_calloc(2, sizeof(char));
+	letter = (unsigned char *)ft_calloc(2, sizeof(char));
 	if (!letter)
-		return NULL; //error handling
+		return (NULL);
 	res = 0;
 	i = 7;
 	j = 0;

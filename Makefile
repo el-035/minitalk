@@ -2,6 +2,9 @@ CC = cc
 
 CLIENT_CFILES = client.c c_utils.c ft_libft.c err_free.c
 SERVER_CFILES = server.c s_utils.c ft_libft.c err_free.c
+
+BONUS_CC = client_bonus.c c_utils_bonus.c ft_libft_bonus.c err_free_bonus.c
+BONUS_SC = server_bonus.c s_utils_bonus.c ft_libft_bonus.c err_free_bonus.c
 #LIBFT_DIR = libft
 #LIBFT = $(LIBFT_DIR)/libft.a
 #LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile
@@ -14,6 +17,8 @@ FT_PRINTF_MAKEFILE = $(FT_PRINTF_DIR)/Makefile
 CLIENT_OFILES = $(CLIENT_CFILES:.c=.o)
 SERVER_OFILES = $(SERVER_CFILES:.c=.o)
 
+BONUS_CO = $(BONUS_CC:.c=.o)
+BONUS_SO = $(BONUS_SC:.c=.o)
 CFLAGS = -Wall -Wextra -Werror
 
 # all compiles all the c files into o files and archive them into libft.a

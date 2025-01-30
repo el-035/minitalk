@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
 unsigned char	*save_msg(char *char_bits, unsigned char *msg)
 {

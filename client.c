@@ -82,9 +82,6 @@ void	handler(int sig)
 	else if (sig == SIGUSR2)
 		exit(1);
 }
-// check interruption
-// funcheck
-// valgrind
 
 int	main(int argc, char **argv)
 {

@@ -1,5 +1,10 @@
 /libft
 /ft_printf
+*.o
+client
+server
+bonus_client
+bonus_server
 .vscode/
 test.c
 sendbits.c

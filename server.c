@@ -25,7 +25,8 @@ unsigned char	*save_msg(char *char_bits, unsigned char *msg)
 	temp = msg;
 	msg = ft_strjoin(msg, letter);
 	if (!msg)
-		errors("Allocation failed\n", (char *)msg);
+		return (free(letter), free(temp), errors("Allocation failed\n",
+				(char *)msg), letter = NULL);
 	return (free(temp), temp = NULL, free(letter), letter = NULL, msg);
 }
 

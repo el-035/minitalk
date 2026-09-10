@@ -30,13 +30,13 @@ client: $(CLIENT_OFILES) $(FT_PRINTF)
 server: $(SERVER_OFILES) $(FT_PRINTF)
 	$(CC) $(CFLAGS) $(SERVER_OFILES) $(FT_PRINTF) -o server
 
-bonus: bonus_client bonus_server
+bonus: client_bonus server_bonus
 
-bonus_client: $(BONUS_CO) $(FT_PRINTF)
-	$(CC) $(CFLAGS) $(BONUS_CO) $(FT_PRINTF) -o bonus_client
+client_bonus: $(BONUS_CO) $(FT_PRINTF)
+	$(CC) $(CFLAGS) $(BONUS_CO) $(FT_PRINTF) -o client_bonus
 
-bonus_server: $(BONUS_SO) $(FT_PRINTF)
-	$(CC) $(CFLAGS) $(BONUS_SO) $(FT_PRINTF) -o bonus_server
+server_bonus: $(BONUS_SO) $(FT_PRINTF)
+	$(CC) $(CFLAGS) $(BONUS_SO) $(FT_PRINTF) -o server_bonus
 
 # this sets the rule to compile all c files into o files $< is the prerequisite (aka the c files) and $@ is the target (aka the o files)
 %.o: %.c
@@ -57,7 +57,7 @@ clean:
 
 #removes o files and library
 fclean: clean
-	rm -f client server bonus_client bonus_server
+	rm -f client server client_bonus server_bonus
 	$(MAKE) -C $(FT_PRINTF_DIR) fclean
 #	$(MAKE) -C $(LIBFT_DIR) fclean
 

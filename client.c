@@ -45,7 +45,7 @@ void	send_message(unsigned char *msg, int pid)
 				kill(pid, SIGUSR1);
 			else if (bits[j] == '1')
 				kill(pid, SIGUSR2);
-			while(return_flag(-1) != 1)
+			while (return_flag(-1) != 1)
 				;
 			return_flag(0);
 			j++;
@@ -63,7 +63,7 @@ void	send_terminator(int pid)
 	{
 		kill(pid, SIGUSR1);
 		j++;
-		while(return_flag(-1) != 1)
+		while (return_flag(-1) != 1)
 			;
 		return_flag(0);
 		usleep(200);
@@ -105,4 +105,3 @@ int	main(int argc, char **argv)
 	send_message((unsigned char *)argv[2], pid);
 	send_terminator(pid);
 }
-

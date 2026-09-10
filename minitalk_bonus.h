@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   minitalk_bonus.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: efittant <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 20:41:49 by efittant          #+#    #+#             */
-/*   Updated: 2025/01/29 20:41:50 by efittant         ###   ########.fr       */
+/*   Created: 2025/01/14 19:38:35 by efittant          #+#    #+#             */
+/*   Updated: 2025/02/02 14:29:07 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#ifndef MINITALK_BONUS_H
+# define MINITALK_BONUS_H
 
 # include "ft_printf/ft_printf.h"
 # include <signal.h>
